@@ -51,3 +51,7 @@ secure:
       - /test/**
       - /testUser/**
       - /testBook/**
+      - /tContract/**
+      - /upload/**
+      - /contractWeb/**
+      - /**
