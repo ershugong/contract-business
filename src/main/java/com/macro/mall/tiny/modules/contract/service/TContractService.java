@@ -3,6 +3,7 @@ package com.macro.mall.tiny.modules.contract.service;
 import com.macro.mall.tiny.common.api.CommonResult;
 import com.macro.mall.tiny.modules.contract.model.TContract;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.macro.mall.tiny.modules.contract.vo.ContractVO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -15,4 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface TContractService extends IService<TContract> {
     CommonResult importExcel(MultipartFile excelFile);
+
+    CommonResult exportExcel(ContractVO contractVO);
 }

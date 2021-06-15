@@ -4,6 +4,7 @@ import com.macro.mall.tiny.common.api.CommonPage;
 import com.macro.mall.tiny.common.api.CommonResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.macro.mall.tiny.modules.contract.vo.ContractVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,6 +67,13 @@ public class TContractController {
         return CommonResult.failed();
     }
 
+    @RequestMapping(value = "/selectById/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult selectById(@PathVariable Long id) {
+        TContract contract = tContractService.getById(id);
+        return CommonResult.success(contract);
+    }
+
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult deleteBatch(@RequestParam("ids") List<Long> ids) {
@@ -76,7 +84,6 @@ public class TContractController {
         return CommonResult.failed();
     }
 
-
     @RequestMapping(value = "/listAll", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult<List<TContract>> listAll() {
@@ -86,22 +93,17 @@ public class TContractController {
 
     @RequestMapping(value = "/listByPage", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult listByPage(@RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                                   @RequestParam(value = "pageIndex",defaultValue = "1") Integer pageIndex,
-                                   @RequestParam(value = "contractNum",defaultValue = "") String contractNum,
-                                   @RequestParam(value = "contractName",defaultValue = "") String contractName,
-                                   @RequestParam(value = "contractClassify",defaultValue = "") String contractClassify
-    ) {
-        Page<TContract> page = new Page<>(pageIndex,pageSize);
+    public CommonResult listByPage(@RequestBody ContractVO contractVO) {
+        Page<TContract> page = new Page<>(contractVO.getPageIndex(),contractVO.getPageSize());
         QueryWrapper<TContract> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(contractNum)){
-            queryWrapper.like("contract_num",contractNum);
+        if (!"".equals(contractVO.getContractNum())){
+            queryWrapper.like("contract_num",contractVO.getContractNum());
         }
-        if (!"".equals(contractName)){
-            queryWrapper.like("contract_name",contractName);
+        if (!"".equals(contractVO.getContractName())){
+            queryWrapper.like("contract_name",contractVO.getContractName());
         }
-        if (!"".equals(contractClassify)){
-            queryWrapper.like("contract_classify",contractClassify);
+        if (!"".equals(contractVO.getContractClassify())){
+            queryWrapper.like("contract_classify",contractVO.getContractClassify());
         }
 
         Page<TContract> pageResult = tContractService.page(page, queryWrapper);
@@ -119,8 +121,9 @@ public class TContractController {
         BufferedInputStream in=null;
         BufferedOutputStream out=null;
         String totalName = "";
+        String fileName = "";
         try{
-            String fileName = file.getOriginalFilename();
+            fileName = file.getOriginalFilename();
             InputStream is = file.getInputStream();
             in=new BufferedInputStream(is);
             totalName = uploadFilePath + "/" + fileName;
@@ -145,7 +148,13 @@ public class TContractController {
             }
         }
 
-        return CommonResult.success("/upload/" + totalName);
+        return CommonResult.success("/upload/" + fileName);
+    }
+
+    @RequestMapping(value = "/exportExcel")
+    public CommonResult exportExcel(@RequestBody ContractVO contractVO) {
+        return tContractService.exportExcel(contractVO);
+
     }
 }
 

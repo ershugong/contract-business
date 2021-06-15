@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: mall-tiny
+    name: contract-business
   profiles:
     active: dev
 
@@ -19,7 +19,7 @@ mybatis-plus:
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
   secret: mall-admin-secret #JWT加解密使用的密钥
-  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  expiration: 86400 #一天有效 #604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
 redis:
@@ -51,7 +51,7 @@ secure:
       - /test/**
       - /testUser/**
       - /testBook/**
-      - /tContract/**
+#      - /tContract/**
       - /upload/**
       - /contractWeb/**
-      - /**
+#      - /**

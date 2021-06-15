@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 @Controller
 @Api(tags = "UmsAdminController", description = "后台用户管理")
 @RequestMapping("/admin")
+@CrossOrigin
 public class UmsAdminController {
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
